@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-providers";
+import FloatingNavbar from "@/components/navbar/navbar";
 
 const PoppinsFont = Poppins({
   variable: "--font-poppins",
@@ -38,6 +39,13 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
+          <FloatingNavbar navItems={
+            [
+              { name: "Home", link: "/", icon: "🏠" },
+              { name: "About", link: "/about", icon: "ℹ️" },
+              { name: "Contact", link: "/contact", icon: "📞" },
+            ]
+          } />
           {children}
         </ThemeProvider>
       </body>
