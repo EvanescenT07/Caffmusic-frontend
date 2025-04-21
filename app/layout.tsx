@@ -10,7 +10,6 @@ const PoppinsFont = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-
 export const metadata: Metadata = {
   title: "CaffMusic",
   description: "Caffmusic is a platform to detect music genre using Machine Learning",
@@ -19,10 +18,16 @@ export const metadata: Metadata = {
       { url: "/favicon.ico" },
       { url: "/favicon-16x16.png", sizes: "16x16" },
       { url: "/favicon-32x32.png", sizes: "32x32" },
-      { url: "/apple-touch-icon.png", sizes: "180x180" },      
+      { url: "/apple-touch-icon.png", sizes: "180x180" },
     ]
   },
 };
+
+const NavbarData = [
+  { name: "Home", link: "/" },
+  { name: "About", link: "/about" },
+  { name: "Contact", link: "/contact" },
+]
 
 export default function RootLayout({
   children,
@@ -39,14 +44,10 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
-          <FloatingNavbar navItems={
-            [
-              { name: "Home", link: "/", icon: "🏠" },
-              { name: "About", link: "/about", icon: "ℹ️" },
-              { name: "Contact", link: "/contact", icon: "📞" },
-            ]
-          } />
-          {children}
+          <FloatingNavbar navItems={NavbarData} />
+          <div className="pt-[80px]">
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>
