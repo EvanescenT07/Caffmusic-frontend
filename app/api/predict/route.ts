@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get('file');
-    
+
     if (!file || !(file instanceof File)) {
         return NextResponse.json({
             error: 'File is required',
@@ -14,14 +14,20 @@ export async function POST(request: Request) {
     }
 
     const fileName = file.name
-    const allowedTypes = ['audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/x-mpeg-3', 'audio/mp3'];
     const maxSize = 10 * 1024 * 1024;
 
-    if (!allowedTypes.includes(file.type)) {
+    const allowedTypes = ['audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/x-mpeg-3', 'audio/mp3'];
+    const allowedExtensions = ['.mp3', '.wav'];
+
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const isValidType = allowedTypes.includes(file.type);
+    const isValidExtension = allowedExtensions.includes(`.${fileExtension}`);
+
+    if (!isValidType && !isValidExtension) {
         return NextResponse.json({
             error: 'Invalid file type',
             status: 400
-        })
+        });
     }
 
     if (file.size > maxSize) {

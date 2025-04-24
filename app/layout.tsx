@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-providers";
 import FloatingNavbar from "@/components/navbar/navbar";
+import NextAuthSessionProvider from "@/provider/session-provider";
 
 const PoppinsFont = Poppins({
   variable: "--font-poppins",
@@ -12,14 +13,15 @@ const PoppinsFont = Poppins({
 
 export const metadata: Metadata = {
   title: "CaffMusic",
-  description: "Caffmusic is a platform to detect music genre using Machine Learning",
+  description:
+    "Caffmusic is a platform to detect music genre using Machine Learning",
   icons: {
     icon: [
       { url: "/favicon.ico" },
       { url: "/favicon-16x16.png", sizes: "16x16" },
       { url: "/favicon-32x32.png", sizes: "32x32" },
       { url: "/apple-touch-icon.png", sizes: "180x180" },
-    ]
+    ],
   },
 };
 
@@ -27,7 +29,7 @@ const NavbarData = [
   { name: "Home", link: "/" },
   { name: "About", link: "/about" },
   { name: "Contact", link: "/contact" },
-]
+];
 
 export default function RootLayout({
   children,
@@ -36,18 +38,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${PoppinsFont.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-        >
-          <FloatingNavbar navItems={NavbarData} />
-          <div className="pt-[80px]">
-            {children}
-          </div>
+      <body className={`${PoppinsFont.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <NextAuthSessionProvider>
+            <FloatingNavbar navItems={NavbarData} />
+            <div className="pt-[80px]">{children}</div>
+          </NextAuthSessionProvider>
         </ThemeProvider>
       </body>
     </html>

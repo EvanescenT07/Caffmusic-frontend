@@ -1,10 +1,9 @@
-import { ThemeToggle } from "@/components/theme/toggle-button";
-import Image from "next/image";
+import DetectionComponents from "@/components/detection/detect";
 
 export default function Home() {
   return (
     <section className="container mx-auto min-h-screen">
-      test
+      <DetectionComponents />
     </section> 
   );
 }

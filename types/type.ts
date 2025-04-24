@@ -8,3 +8,12 @@ export interface FloatingNavbarProps {
     }>,
     className?: string,
 }
+
+export type PredictionResultProps = {
+    prediction_id: string;
+    confidence: number;
+    final_prediction: string | null;
+    fileName?: string;
+    fileType?: string;
+    timestamp: string;
+}
