@@ -14,10 +14,13 @@ import {
 } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
+import { userHook } from "@/hooks/userhooks";
 
 const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { data: session } = useSession();
+  const router = useRouter();
+  const user = userHook();
 
   return (
     <div
@@ -47,75 +50,91 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
         </div>
 
         {/* Login/Logout Button */}
-        <div className="hidden md:block">
-          {session ? (
-            <Button
-              onClick={() => signOut()}
-              size="sm"
-              className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
-            >
-              {session.user?.name || "Sign Out"}
-            </Button>
-          ) : (
-            <Button
-              onClick={() => signIn()}
-              size="sm"
-              className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
-            >
-              Login
-            </Button>
-          )}
-        </div>
-
-        {/* Mobile nav trigger: tampil hanya di bawah sm */}
-        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <SheetTrigger className="sm:hidden flex items-center justify-center w-10 h-10 rounded-full bg-transparent hover:bg-[#ccc] dark:hover:bg-[#383838] dark:hover:text-[#ccc] hover:text-[#383838]">
-            {isSheetOpen ? (
-              <X className="w-5 h-5 hover:text-[#ccc] dark:hover:text-[#383838]" />
-            ) : (
-              <Menu className="w-5 h-5 dark:hover:text-[#ccc] hover:text-[#383838]" />
-            )}
-          </SheetTrigger>
-          <SheetContent
-            className="flex flex-col z-50 bg-background/70 dark:bg-transparent backdrop-blur-md shadow-md rounded-2xl border border-black/10 dark:border-white/10"
-            onInteractOutside={() => setIsSheetOpen(false)}
+        {user ? (
+          <Button
+            onClick={async () => {
+              if (user.isOAuth) {
+                // NextAuth logout
+                signOut();
+              } else {
+                // Custom JWT logout
+                await fetch("/api/auth/logout", { method: "POST" });
+                router.push("/login");
+              }
+            }}
+            size="sm"
+            className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
           >
-            <SheetTitle className="mt-24 mb-24 text-center text-2xl font-bold text-[#383838] dark:text-[#ccc]">
-              CaffMusic
-            </SheetTitle>
-            <nav className="flex flex-col items-center space-y-4">
-              {navItems.map((content, idx: number) => (
-                <Link
-                  key={`sheet-link=${idx}`}
-                  href={content.link}
-                  className="capitalize text-base font-medium text-foreground hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838] rounded-full px-4 py-2 flex items-center gap-2"
-                  onClick={() => setIsSheetOpen(false)}
-                >
-                  <span className="text-sm">{content.name}</span>
-                </Link>
-              ))}
-
-              {session ? (
-                <Button
-                  onClick={() => signOut()}
-                  size="sm"
-                  className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
-                >
-                  {session.user?.name || "Sign Out"}
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => signIn()}
-                  size="sm"
-                  className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
-                >
-                  Login
-                </Button>
-              )}
-            </nav>
-          </SheetContent>
-        </Sheet>
+            {user.name || user.email || "Sign Out"}
+          </Button>
+        ) : (
+          <Button
+            onClick={() => router.push("/login")}
+            size="sm"
+            className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
+          >
+            Login
+          </Button>
+        )}
       </div>
+
+      {/* Mobile nav trigger: tampil hanya di bawah sm */}
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+        <SheetTrigger className="sm:hidden flex items-center justify-center w-10 h-10 rounded-full bg-transparent hover:bg-[#ccc] dark:hover:bg-[#383838] dark:hover:text-[#ccc] hover:text-[#383838]">
+          {isSheetOpen ? (
+            <X className="w-5 h-5 hover:text-[#ccc] dark:hover:text-[#383838]" />
+          ) : (
+            <Menu className="w-5 h-5 dark:hover:text-[#ccc] hover:text-[#383838]" />
+          )}
+        </SheetTrigger>
+        <SheetContent
+          className="flex flex-col z-50 bg-background/70 dark:bg-transparent backdrop-blur-md shadow-md rounded-2xl border border-black/10 dark:border-white/10"
+          onInteractOutside={() => setIsSheetOpen(false)}
+        >
+          <SheetTitle className="mt-24 mb-24 text-center text-2xl font-bold text-[#383838] dark:text-[#ccc]">
+            CaffMusic
+          </SheetTitle>
+          <nav className="flex flex-col items-center space-y-4">
+            {navItems.map((content, idx: number) => (
+              <Link
+                key={`sheet-link=${idx}`}
+                href={content.link}
+                className="capitalize text-base font-medium text-foreground hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838] rounded-full px-4 py-2 flex items-center gap-2"
+                onClick={() => setIsSheetOpen(false)}
+              >
+                <span className="text-sm">{content.name}</span>
+              </Link>
+            ))}
+
+            {user ? (
+              <Button
+                onClick={async () => {
+                  if (user.isOAuth) {
+                    // NextAuth logout
+                    signOut();
+                  } else {
+                    // Custom JWT logout
+                    await fetch("/api/auth/logout", { method: "POST" });
+                    router.push("/login");
+                  }
+                }}
+                size="sm"
+                className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
+              >
+                {user.name || user.email || "Sign Out"}
+              </Button>
+            ) : (
+              <Button
+                onClick={() => router.push("/login")}
+                size="sm"
+                className="rounded-full px-4 hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
+              >
+                Login
+              </Button>
+            )}
+          </nav>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

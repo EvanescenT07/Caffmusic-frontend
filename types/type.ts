@@ -17,3 +17,10 @@ export type PredictionResultProps = {
     fileType?: string;
     timestamp: string;
 }
+
+export type UserProps = {
+    id: string;
+    email: string;
+    name?: string
+    isOAuth?: boolean;
+}

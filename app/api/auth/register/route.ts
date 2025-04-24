@@ -1,40 +1,36 @@
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in the environment variables");
-}
+import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
-  const { email, password } = await request.json();
-  const user = await prisma.user.findUnique({
+  const { email, name, password } = await request.json();
+  if (!email || !password) {
+    return NextResponse.json(
+      { error: "Email and password are required" },
+      { status: 400 }
+    );
+  }
+  const userExist = await prisma.user.findUnique({
     where: { email },
   });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  if (userExist) {
+    return NextResponse.json(
+      { error: "User Email already exists" },
+      { status: 400 }
+    );
   }
-  const token = jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
+  const hash = await bcrypt.hash(password, 10);
+  await prisma.user.create({
+    data: {
+      email,
+      name,
+      password: hash,
     },
-    JWT_SECRET as string,
-    { expiresIn: "1h" }
-  );
-  return NextResponse.json(
-    {
+  });
+  return (
+    NextResponse.json({
       success: true,
-      message: "Login successful",
-      token,
-    },
-    {
-      status: 200,
-      headers: {
-        "Set-Cookie": `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict; Secure`,
-      },
-    }
+      message: "User created successfully",
+    })
   );
 }
