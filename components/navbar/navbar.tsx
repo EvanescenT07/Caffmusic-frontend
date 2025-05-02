@@ -74,9 +74,12 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
                   onClick={async () => {
                     if (user.isOAuth) {
                       signOut();
+                      router.push("/");
+                      window.location.replace("/");
                     } else {
                       await fetch("/api/auth/logout", { method: "POST" });
                       router.push("/");
+                      window.location.replace("/");
                     }
                   }}
                   className="cursor-pointer hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"

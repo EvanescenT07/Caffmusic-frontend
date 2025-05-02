@@ -41,6 +41,7 @@ export default function RegisterComponent() {
       await axios.post("/api/auth/register", { name, email, password });
       toast.success("Registration successful!");
       router.push("/login");
+      
     } catch {
       setError("Registration failed. Please try again.");
       toast.error("Registration failed. Please try again.");
@@ -91,7 +92,7 @@ export default function RegisterComponent() {
 
           <form onSubmit={handleRegist} className="flex flex-col gap-4">
             <div className="relative">
-              <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="Full Name"
@@ -103,7 +104,7 @@ export default function RegisterComponent() {
             </div>
 
             <div className="relative">
-              <AtSign className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <AtSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="email"
                 placeholder="Email"
@@ -115,7 +116,7 @@ export default function RegisterComponent() {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="password"
                 placeholder="Password"
@@ -127,7 +128,7 @@ export default function RegisterComponent() {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="password"
                 placeholder="Confirm Password"

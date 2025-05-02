@@ -13,13 +13,14 @@ export async function POST(request: Request) {
   const user = await prisma.user.findUnique({
     where: { email },
   });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+  if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
+    return NextResponse.json({ error: "Invalid credentials" }, { status: 400 });
   }
   const token = jwt.sign(
     {
       id: user.id,
       email: user.email,
+      name: user.name,
     },
     JWT_SECRET as string,
     { expiresIn: "1h" }
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     {
       status: 200,
       headers: {
-        "Set-Cookie": `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict; Secure`,
+        "Set-Cookie": `token=${token}; Path=/; Max-Age=3600; SameSite=Strict;`,
       },
     }
   );

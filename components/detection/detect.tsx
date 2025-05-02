@@ -3,7 +3,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import type { PredictionResultProps } from "@/types/type";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Loader2, Music, AlertCircle } from "lucide-react";
@@ -93,8 +93,6 @@ const DetectionComponents = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Audio Upload Section */}
         <Card>

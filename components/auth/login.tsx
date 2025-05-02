@@ -30,15 +30,19 @@ export default function LoginComponent() {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("/api/auth/login", { email, password });
-      if (response.status === 200) {
-        toast.success("Login successful!");
-        router.push("/"); // redirect ke home
-      } else {
-        toast.error("Invalid credentials. Please try again.");
-      }
+      const response = await axios.post("/api/auth/login", {
+        email,
+        password,
+      });
+      toast.success(response.data.message || "Login successful!");
+      router.push("/");
+      window.location.replace("/");
     } catch (error) {
-      toast.error("Login failed. Please check your credentials.");
+      let message = "Login failed. Please check your credentials.";
+      if (axios.isAxiosError(error)) {
+        message = error.response?.data?.error || error.message || message;
+      }
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -86,7 +90,7 @@ export default function LoginComponent() {
 
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             <div className="relative">
-              <AtSign className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <AtSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="email"
                 placeholder="Email"
@@ -98,7 +102,7 @@ export default function LoginComponent() {
             </div>
 
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="password"
                 placeholder="Password"

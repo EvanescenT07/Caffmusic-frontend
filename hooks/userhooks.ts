@@ -16,20 +16,21 @@ export function userHook(): UserProps | null {
         isOAuth: true,
       });
     } else {
-        const match = document.cookie.match(/token=([^;]+)/);
-        if (match) {
-            try {
-                const decode = jwtDecode<UserProps>(match[1]);
-                setUser({
-                    ...decode, isOAuth: false
-                });
-            } catch {
-                setUser(null);
-            }
-    } else {
+      const match = document.cookie.match(/token=([^;]+)/);
+      if (match) {
+        try {
+          const decode = jwtDecode<UserProps>(match[1]);
+          setUser({
+            ...decode,
+            isOAuth: false,
+          });
+        } catch {
+          setUser(null);
+        }
+      } else {
         setUser(null);
+      }
     }
-  }
   }, [session]);
 
   return user;

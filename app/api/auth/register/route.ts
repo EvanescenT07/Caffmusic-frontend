@@ -27,10 +27,8 @@ export async function POST(request: Request) {
       password: hash,
     },
   });
-  return (
-    NextResponse.json({
-      success: true,
-      message: "User created successfully",
-    })
-  );
+  return NextResponse.json({
+    success: true,
+    message: "User created successfully",
+  });
 }
