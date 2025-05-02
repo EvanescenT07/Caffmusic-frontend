@@ -1,16 +1,10 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  return NextResponse.json(
-    {
-      success: true,
-      message: "Logout successful",
-    },
-    {
-      status: 200,
-      headers: {
-        "Set-Cookie": `token=; Path=/; Max-Age=0; SameSite=Strict;`,
-      },
-    }
+  const response = NextResponse.json({ success: true, message: "Logged out" });
+  response.headers.set(
+    "Set-Cookie",
+    "token=; Path=/; Max-Age=0; SameSite=Strict; HttpOnly"
   );
+  return response;
 }

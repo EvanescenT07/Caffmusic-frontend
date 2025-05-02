@@ -28,10 +28,6 @@ const DetectionComponents = () => {
     }
   };
 
-  useEffect(() => {
-    fetchHistory();
-  }, []);
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (
@@ -69,10 +65,25 @@ const DetectionComponents = () => {
       if (response.data && response.data.final_prediction) {
         setResult(response.data);
         toast.success("Prediction successful");
-        fetchHistory();
+
+        try {
+          await axios.post(`/api/history/${response.data.prediction_id}`, {
+            fileName: file.name,
+            genre: response.data.final_prediction,
+            predictionId: response.data.prediction_id,
+            confidence: response.data.confidence,
+            chunkPredictions: response.data.chunk_predictions,
+            finalPrediction: response.data.final_prediction,
+            timestamp: new Date().toISOString(),
+          });
+        } catch {
+          toast.error("Failed to save prediction history");
+        } finally {
+          fetchHistory();
+        }
       } else {
         toast.error(response.data?.error || "Prediction failed");
-      }
+      }   
     } catch {
       setError("Prediction failed");
       toast.error("Prediction failed");

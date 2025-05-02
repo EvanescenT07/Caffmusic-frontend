@@ -22,7 +22,9 @@ export async function GET() {
         if (!JWT_SECRET) {
           throw new Error("JWT_SECRET is not defined");
         }
-        const payload = jwt.verify(token, JWT_SECRET) as unknown as { id: string };
+        const payload = jwt.verify(token, JWT_SECRET) as unknown as {
+          id: string;
+        };
         userId = payload.id;
       } catch {
         return NextResponse.json({ error: "Invalid token" }, { status: 401 });

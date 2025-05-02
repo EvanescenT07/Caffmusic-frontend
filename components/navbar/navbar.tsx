@@ -140,6 +140,7 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
                       } else {
                         await fetch("/api/auth/logout", { method: "POST" });
                         router.push("/");
+                        window.location.replace("/");
                       }
                     }}
                     size="sm"
