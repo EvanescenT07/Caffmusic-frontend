@@ -1,20 +1,49 @@
 import { AuthOptions, Session, User } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
 import { JWT } from "next-auth/jwt";
+import bcrypt from "bcryptjs";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text", placeholder: "email" },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "password",
+        },
+      },
+      async authorize(credentials, request) {
+        if (!credentials?.email || !credentials.password) return null;
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
+        if (!user || !user.password) return null;
+
+        const isValidPassword = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!isValidPassword) return null;
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          isOAuth: false,
+          createdAt: user.createdAt,
+        };
+      },
     }),
   ],
   session: {
@@ -29,12 +58,10 @@ export const authOptions: AuthOptions = {
       return session;
     },
     async jwt({ token, user }: { token: JWT; user?: User }) {
-      // user hanya ada saat sign in pertama kali
       if (user) {
         token.id = user.id;
         token.email = user.email;
       }
-      // Ensure token.id exists for compatibility with the session callback
       if (!token.id) {
         token.id = token.sub as string;
       }

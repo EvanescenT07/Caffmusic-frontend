@@ -30,6 +30,10 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
   const router = useRouter();
   const user = userHook();
 
+  const handleLogout = async () => {
+    signOut({ callbackUrl: "/" });
+  };
+
   return (
     <div
       className={cn(
@@ -71,17 +75,7 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
                 <DropdownMenuLabel>{user.name || user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={async () => {
-                    if (user.isOAuth) {
-                      signOut();
-                      router.push("/");
-                      window.location.replace("/");
-                    } else {
-                      await fetch("/api/auth/logout", { method: "POST" });
-                      router.push("/");
-                      window.location.replace("/");
-                    }
-                  }}
+                  onClick={() => signOut({ callbackUrl: "/" })}
                   className="cursor-pointer hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
                 >
                   Sign Out
@@ -134,14 +128,9 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
                     {user.name || user.email}
                   </span>
                   <Button
-                    onClick={async () => {
-                      if (user.isOAuth) {
-                        signOut();
-                      } else {
-                        await fetch("/api/auth/logout", { method: "POST" });
-                        router.push("/");
-                        window.location.replace("/");
-                      }
+                    onClick={() => {
+                      setIsSheetOpen(false);
+                      handleLogout();
                     }}
                     size="sm"
                     className="w-full rounded-full hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"

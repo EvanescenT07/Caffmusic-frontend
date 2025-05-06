@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import {
   Card,
@@ -41,7 +40,6 @@ export default function RegisterComponent() {
       await axios.post("/api/auth/register", { name, email, password });
       toast.success("Registration successful!");
       router.push("/login");
-      
     } catch {
       setError("Registration failed. Please try again.");
       toast.error("Registration failed. Please try again.");
@@ -70,13 +68,6 @@ export default function RegisterComponent() {
             >
               <FcGoogle className="w-5 h-5" /> Register with Google
             </Button>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 justify-center rounded-full transition-all hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
-              onClick={() => signIn("github")}
-            >
-              <FaGithub className="w-5 h-5" /> Register with GitHub
-            </Button>
           </div>
 
           <div className="relative my-5">
@@ -89,7 +80,6 @@ export default function RegisterComponent() {
               </span>
             </div>
           </div>
-
           <form onSubmit={handleRegist} className="flex flex-col gap-4">
             <div className="relative">
               <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />

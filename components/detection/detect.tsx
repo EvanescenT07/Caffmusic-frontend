@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { PredictionResultProps } from "@/types/type";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -78,12 +78,10 @@ const DetectionComponents = () => {
           });
         } catch {
           toast.error("Failed to save prediction history");
-        } finally {
-          fetchHistory();
         }
       } else {
         toast.error(response.data?.error || "Prediction failed");
-      }   
+      }
     } catch {
       setError("Prediction failed");
       toast.error("Prediction failed");

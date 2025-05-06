@@ -1,15 +1,12 @@
 "use client";
 
 import type React from "react";
-
-import axios from "axios";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import {
   Card,
@@ -30,19 +27,20 @@ export default function LoginComponent() {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("/api/auth/login", {
+      const response = await signIn("credentials", {
+        redirect: false,
         email,
         password,
+        callbackUrl: "/",
       });
-      toast.success(response.data.message || "Login successful!");
-      router.push("/");
-      window.location.replace("/");
-    } catch (error) {
-      let message = "Login failed. Please check your credentials.";
-      if (axios.isAxiosError(error)) {
-        message = error.response?.data?.error || error.message || message;
+      if (response?.error) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.success("Login successful");
+        router.push("/");
       }
-      toast.error(message);
+    } catch (error) {
+      toast.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -67,13 +65,6 @@ export default function LoginComponent() {
               onClick={() => signIn("google", { callbackUrl: "/" })}
             >
               <FcGoogle className="w-5 h-5" /> Login with Google
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2 justify-center rounded-full transition-all hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
-              onClick={() => signIn("github", { callbackUrl: "/" })}
-            >
-              <FaGithub className="w-5 h-5" /> Login with GitHub
             </Button>
           </div>
 
