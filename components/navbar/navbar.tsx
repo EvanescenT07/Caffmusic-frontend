@@ -67,8 +67,10 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
                   variant="ghost"
                   className="flex items-center gap-2 rounded-full px-4"
                 >
-                  <UserIcon className="w-5 h-5" />
-                  <span className="hidden sm:inline">{user.name}</span>
+                  <UserIcon className="w-5 h-5 dark:text-[#ccc] text-[#383838]" />
+                  <span className="hidden sm:inline dark:text-[#ccc] text-[#383838]">
+                    {user.name}
+                  </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">

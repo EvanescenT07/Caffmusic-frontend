@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { PredictionResultProps } from "@/types/type";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -27,6 +27,10 @@ const DetectionComponents = () => {
       setHistory([]);
     }
   };
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -76,6 +80,7 @@ const DetectionComponents = () => {
             finalPrediction: response.data.final_prediction,
             timestamp: new Date().toISOString(),
           });
+          fetchHistory(); // fetch setelah post history berhasil
         } catch {
           toast.error("Failed to save prediction history");
         }
@@ -161,7 +166,9 @@ const DetectionComponents = () => {
             {isLoading && (
               <div className="flex items-center justify-center gap-2 py-8">
                 <Loader2 className="animate-spin w-5 h-5" />
-                <p>Processing audio...</p>
+                <p className="text-[#383838] dark:text-[#ccc]">
+                  Processing audio...
+                </p>
               </div>
             )}
 
@@ -216,21 +223,24 @@ const DetectionComponents = () => {
                   <ul className="space-y-2">
                     {history.map((item) => (
                       <li
-                        key={item.prediction_id}
+                        key={item.id}
                         className="bg-muted/50 rounded-md p-3 flex justify-between items-center"
                       >
                         <div className="flex flex-col">
-                          <span className="font-medium">
-                            {item.final_prediction}
-                          </span>
                           <span className="text-xs text-muted-foreground">
                             {new Date(item.timestamp).toLocaleString()}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            {item.fileName}
+                          </span>
+                          <span className="font-bold dark:text-[#ccc] text-[#383838]">
+                            {item.finalPrediction}
                           </span>
                         </div>
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDelete(item.prediction_id)}
+                          onClick={() => handleDelete(item.id)}
                         >
                           Delete
                         </Button>

@@ -1,31 +1,11 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
-
-const JWT_SECRET = process.env.JWT_SECRET;
+import { authOptions } from "../../auth/[...nextauth]/option";
 
 export async function POST(request: Request) {
-  const session = await getServerSession();
-  let userId: string | null = null;
-
-  if (session?.user?.id) {
-    userId = session.user.id;
-  } else {
-    const myCookies = await cookies();
-    const token = myCookies.get("token")?.value;
-    if (token && JWT_SECRET) {
-      try {
-        const payload = jwt.verify(token, JWT_SECRET) as { id: string };
-        userId = payload.id;
-      } catch {
-        return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-      }
-    }
-  }
-
-  if (!userId) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -42,7 +22,7 @@ export async function POST(request: Request) {
 
   const prediction = await prisma.prediction.create({
     data: {
-      userId,
+      userId: session.user.id,
       fileName,
       genre,
       predictionId,
@@ -56,10 +36,10 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       success: true,
-      message: "Prediction updated successfully",
+      message: "Prediction saved successfully",
       prediction,
     },
-    { status: 201 }
+    { status: 200 }
   );
 }
 
@@ -67,38 +47,27 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const session = await getServerSession();
-  let userId: string | null = null;
-
-  if (session?.user?.id) {
-    userId = session.user.id;
-  } else {
-    const myCookies = await cookies();
-    const token = myCookies.get("token")?.value;
-    if (token && JWT_SECRET) {
-      try {
-        const payload = jwt.verify(token, JWT_SECRET) as { id: string };
-        userId = payload.id;
-      } catch {
-        return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-      }
-    }
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const prediction = await prisma.prediction.findUnique({
+  const history = await prisma.prediction.findUnique({
     where: { id: params.id },
   });
 
-  if (!prediction || prediction.userId !== userId) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!history || history.userId !== session.user.id) {
+    return NextResponse.json({ error: "History not found" }, { status: 404 });
   }
 
   await prisma.prediction.delete({
     where: { id: params.id },
   });
-
   return NextResponse.json(
-    { success: true, message: "Prediction deleted successfully" },
+    {
+      success: true,
+      message: "History deleted successfully",
+    },
     { status: 200 }
-  );
+  );  
 }

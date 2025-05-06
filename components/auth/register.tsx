@@ -52,10 +52,10 @@ export default function RegisterComponent() {
     <div className="flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
       <Card className="w-full max-w-md bg-white/70 dark:bg-background/70 backdrop-blur-md shadow-lg border border-black/10 dark:border-white/10 rounded-2xl">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
+          <CardTitle className="text-2xl font-bold text-center dark:text-[#ccc] text-[#383838]">
             Create Account
           </CardTitle>
-          <CardDescription className="text-center">
+          <CardDescription className="text-center dark:text-[#ccc] text-[#383838]">
             Sign up to get started with our service
           </CardDescription>
         </CardHeader>
@@ -132,13 +132,13 @@ export default function RegisterComponent() {
             <Button
               type="submit"
               disabled={loading}
-              className="rounded-full mt-2 transition-all hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838]"
+              className="rounded-full mt-2 transition-all hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838] dark:text-[#ccc] text-[#383838]"
             >
               {loading ? "Loading..." : "Create Account"}
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm">
+          <p className="mt-6 text-center text-sm dark:text-[#ccc] text-[#383838]">
             Already have an account?{" "}
             <a
               href="/login"

@@ -113,7 +113,7 @@ export default function LoginComponent() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm">
+          <p className="mt-6 text-center text-sm dark:text-[#ccc] text-[#383838]">
             Don't have an account?{" "}
             <a
               href="/register"
