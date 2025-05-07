@@ -189,7 +189,7 @@ const DetectionComponents = () => {
                       Final Prediction:
                     </span>
                     <span className="font-medium">
-                      {result.final_prediction}
+                      {result.finalPrediction}
                     </span>
                   </p>
                   <p className="flex justify-between">

@@ -24,14 +24,12 @@ export default function RegisterComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleRegist = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
       toast.error("Passwords do not match");
       return;
     }
@@ -41,7 +39,6 @@ export default function RegisterComponent() {
       toast.success("Registration successful!");
       router.push("/login");
     } catch {
-      setError("Registration failed. Please try again.");
       toast.error("Registration failed. Please try again.");
     } finally {
       setLoading(false);

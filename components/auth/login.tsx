@@ -39,7 +39,7 @@ export default function LoginComponent() {
         toast.success("Login successful");
         router.push("/");
       }
-    } catch (error) {
+    } catch {
       toast.error("Login failed. Please try again.");
     } finally {
       setLoading(false);
@@ -114,7 +114,7 @@ export default function LoginComponent() {
           </form>
 
           <p className="mt-6 text-center text-sm dark:text-[#ccc] text-[#383838]">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <a
               href="/register"
               className="text-primary hover:underline font-medium"
