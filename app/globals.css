@@ -82,7 +82,7 @@
 .dark {
   --background: #252525;
   --foreground: #fbfbfb;
-  --card: # ;
+  --card: #;
   --card-foreground: #fbfbfb;
   --popover: #343434;
   --popover-foreground: #fbfbfb;
@@ -118,28 +118,44 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   html {
-    transition: color var(--transition-theme), 
-                background-color var(--transition-theme),
-                border-color var(--transition-theme);
+    scroll-behavior: smooth;
+    transition: color var(--transition-theme),
+      background-color var(--transition-theme),
+      border-color var(--transition-theme);
   }
-  
+
   body {
     @apply bg-background text-foreground;
-    transition: color var(--transition-theme), 
-                background-color var(--transition-theme),
-                border-color var(--transition-theme);
+    transition: color var(--transition-theme),
+      background-color var(--transition-theme),
+      border-color var(--transition-theme);
   }
-  
+
   /* Add transitions to other common elements */
-  button, 
-  input, 
-  a, 
+  button,
+  input,
+  a,
   div {
-    transition: color var(--transition-theme), 
-                background-color var(--transition-theme),
-                border-color var(--transition-theme),
-                box-shadow var(--transition-theme);
+    transition: color var(--transition-theme),
+      background-color var(--transition-theme),
+      border-color var(--transition-theme), box-shadow var(--transition-theme);
   }
+}
+
+/* Animation Soundwave */
+@keyframes soundwave {
+  0%,
+  100% {
+    height: 0.5rem;
+  }
+  50% {
+    height: 2rem;
+  }
+}
+.animation-soundwave {
+  animation-name: soundwave;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }

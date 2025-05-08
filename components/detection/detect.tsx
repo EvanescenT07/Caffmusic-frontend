@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
-const DetectionComponents = () => {
+const DetectionComponents = ({ id }: { id: string }) => {
   const [file, setFile] = useState<File | null>(null);
   const [result, setResult] = useState<PredictionResultProps | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -106,8 +106,16 @@ const DetectionComponents = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div id={id} className="container mx-auto px-4 py-8">
+      <div className="flex flex-col space-y-3">
+        <h3 className="text-center font-semibold text-4xl text-[#383838] dark:text-[#f1ecec]">
+          Predict Your Music Now
+        </h3>
+        <span className="text-center font-normal text-muted-foreground text-base">
+          Upload your music file and see the AI in action
+        </span>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-8">
         {/* Audio Upload Section */}
         <Card>
           <CardHeader>

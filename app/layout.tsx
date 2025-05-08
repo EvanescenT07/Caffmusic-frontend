@@ -27,9 +27,8 @@ export const metadata: Metadata = {
 };
 
 const NavbarData = [
-  { name: "Home", link: "/" },
-  { name: "About", link: "/about" },
-  { name: "Contact", link: "/contact" },
+  { name: "Home", link: "/#home" },
+  { name: "Knowledge", link: "/knowledge" },
 ];
 
 export default function RootLayout({

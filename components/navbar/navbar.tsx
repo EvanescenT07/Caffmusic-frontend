@@ -55,7 +55,6 @@ const FloatingNavbar = ({ navItems, className }: FloatingNavbarProps) => {
               href={content.link}
               className="capitalize text-sm sm:text-base font-medium text-foreground hover:bg-[#383838] dark:hover:bg-[#ccc] hover:text-[#ccc] dark:hover:text-[#383838] rounded-full px-4 py-2 flex items-center gap-2"
             >
-              <span className="block sm:hidden">{content.icon}</span>
               <span className="text-sm">{content.name}</span>
             </Link>
           ))}

@@ -25,3 +25,23 @@ export type UserProps = {
   name?: string;
   isOAuth?: boolean;
 };
+
+export interface WrapperProps {
+  children: React.ReactNode;
+}
+
+export type CardComponentProps = {
+  icon: React.ReactNode | string;
+  title: string;
+  description: string;
+};
+export type CardComponentList = CardComponentProps[];
+
+export type WorkflowComponentProps = {
+  step: number;
+  icon: React.ReactNode | string;
+  title: string;
+  description: string;
+};
+
+export type WorkflowComponentList = WorkflowComponentProps[];
