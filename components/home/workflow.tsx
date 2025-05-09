@@ -25,9 +25,9 @@ const WorkflowCardComponent: WorkflowComponentList = [
   },
 ];
 
-const WorkflowComponent = () => {
+const WorkflowComponent = ({ id }: { id: string }) => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div id={id} className="container mx-auto px-4 py-8">
       <div className="flex flex-col justify-center items-center space-y-3">
         <h3 className="text-4xl font-extrabold text-[#383838] dark:text-[#f1ecec]">
           How It Works

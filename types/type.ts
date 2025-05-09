@@ -45,3 +45,10 @@ export type WorkflowComponentProps = {
 };
 
 export type WorkflowComponentList = WorkflowComponentProps[];
+
+export type FooterProps = {
+  title: string;
+  links: { label: string; href: string }[];
+};
+
+export type FooterList = FooterProps[];

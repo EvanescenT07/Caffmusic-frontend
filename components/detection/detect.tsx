@@ -80,7 +80,7 @@ const DetectionComponents = ({ id }: { id: string }) => {
             finalPrediction: response.data.final_prediction,
             timestamp: new Date().toISOString(),
           });
-          fetchHistory(); // fetch setelah post history berhasil
+          fetchHistory();
         } catch {
           toast.error("Failed to save prediction history");
         }

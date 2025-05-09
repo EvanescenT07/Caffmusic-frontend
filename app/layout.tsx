@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme/theme-providers";
 import FloatingNavbar from "@/components/navbar/navbar";
 import NextAuthSessionProvider from "@/provider/session-provider";
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/home/footer";
 
 const PoppinsFont = Poppins({
   variable: "--font-poppins",
@@ -44,6 +45,7 @@ export default function RootLayout({
             <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
             <FloatingNavbar navItems={NavbarData} />
             <div className="pt-[80px]">{children}</div>
+            <Footer />
           </NextAuthSessionProvider>
         </ThemeProvider>
       </body>

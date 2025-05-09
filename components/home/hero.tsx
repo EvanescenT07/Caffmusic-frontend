@@ -82,7 +82,7 @@ const HeroComponent = ({ id }: { id: string }) => {
           <SoundWaveAnimationComponent />
         </div>
         <div className="pt-8 w-full">
-          <WorkflowComponent />
+          <WorkflowComponent id="workflow" />
         </div>
       </div>
     </div>
