@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
-import { authOptions } from "../../auth/[...nextauth]/option";
+import { authOptions } from "@/app/api/auth/[...nextauth]/option";
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -45,8 +45,14 @@ export async function POST(request: Request) {
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
+  const { params } = context;
+  
+  if (!params.id) {
+    return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+  }
+
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -69,5 +75,5 @@ export async function DELETE(
       message: "History deleted successfully",
     },
     { status: 200 }
-  );  
+  );
 }
