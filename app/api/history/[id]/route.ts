@@ -45,21 +45,20 @@ export async function POST(request: Request) {
 
 export async function DELETE(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { params } = context;
-  
-  if (!params.id) {
+  const session = await getServerSession(authOptions);
+  const id = (await params).id;
+  if (!id) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
-  const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const history = await prisma.prediction.findUnique({
-    where: { id: params.id },
+    where: { id: id },
   });
 
   if (!history || history.userId !== session.user.id) {
@@ -67,7 +66,7 @@ export async function DELETE(
   }
 
   await prisma.prediction.delete({
-    where: { id: params.id },
+    where: { id: id },
   });
   return NextResponse.json(
     {
