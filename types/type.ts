@@ -52,3 +52,17 @@ export type FooterProps = {
 };
 
 export type FooterList = FooterProps[];
+
+export type PipelineProps = {
+  step: number;
+  title: string;
+  description: string;
+};
+
+export type PipelineList = PipelineProps[];
+
+export interface CodeSnippetProps {
+  language: string;
+  code: string;
+  title?: string;
+}
